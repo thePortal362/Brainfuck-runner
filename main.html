@@ -6,15 +6,33 @@
     <title>Brainfuck Interpreter</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                margin-top: 400px;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #3a4244;
             margin: 0;
             padding: 20px;
+            animation: fadeIn 2s ease-in-out;
         }
         h1 {
             text-align: center;
         }
+
+        h1::selection {
+            background-color:#28a745;
+            color: whitesmoke;
+        }
+
         #container {
             max-width: 800px;
             margin: 0 auto;
@@ -31,6 +49,10 @@
             font-family: monospace;
             border-radius: 15px;
         }
+        textarea::selection{
+            background-color:#28a745;
+            color: whitesmoke;
+        }
         button {
             background-color: #28a745;
             color: white;
@@ -44,6 +66,9 @@
         button:hover {
             background-color: #218838;
         }
+        button::selection{
+            background-color: transparent;
+        }
         #output {
             margin-top: 15px;
             white-space: pre-wrap;
@@ -52,6 +77,18 @@
             border: 1px solid #ccc;
             min-height: 50px;
             border-radius: 15px;
+        }
+        h2::selection{
+            background-color:#28a745;
+            color: whitesmoke;
+        }
+        h3::selection{
+            background-color:#28a745;
+            color: whitesmoke;
+        }
+        label::selection{
+            background-color:#28a745;
+            color: whitesmoke;
         }
     </style>
 </head>
