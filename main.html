@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainfuck Interpreter</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #3a4244;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        #container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: whitesmoke;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            box-shadow: 7px 10px #0000002d;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+            font-family: monospace;
+            border-radius: 15px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 20px;
+            box-shadow: 2px 3px #0000002d;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #output {
+            margin-top: 15px;
+            white-space: pre-wrap;
+            background: #e9ecef;
+            padding: 10px;
+            border: 1px solid #ccc;
+            min-height: 50px;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <h1>Brainfuck Interpreter</h1>
+        
+        <label for="codeInput">Enter Brainfuck Code:</label>
+        <textarea id="codeInput"></textarea>
+
+        <button onclick="runBrainfuck()">Run Code</button>
+
+        <h3>Output:</h3>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function runBrainfuck() {
+            const code = document.getElementById('codeInput').value;
+            const outputDiv = document.getElementById('output');
+            let output = '';
+
+            const memory = new Array(30000).fill(0);
+            let pointer = 0; 
+
+            let codePointer = 0;
+            const loopStack = [];
+
+            while (codePointer < code.length) {
+                const command = code[codePointer];
+
+                switch (command) {
+                    case '>':
+                        pointer++;
+                        break;
+                    case '<':
+                        pointer--;
+                        break;
+                    case '+':
+                        memory[pointer] = (memory[pointer] + 1) % 256;
+                        break;
+                    case '-':
+                        memory[pointer] = (memory[pointer] - 1 + 256) % 256;
+                        break;
+                    case '.':
+                        output += String.fromCharCode(memory[pointer]);
+                        break;
+                    case ',':
+                        const userInput = prompt('Input a character:');
+                        memory[pointer] = userInput ? userInput.charCodeAt(0) : 0;
+                        break;
+                    case '[':
+                        if (memory[pointer] === 0) {
+                            let loopEnd = 1;
+                            while (loopEnd > 0) {
+                                codePointer++;
+                                if (code[codePointer] === '[') loopEnd++;
+                                if (code[codePointer] === ']') loopEnd--;
+                            }
+                        } else {
+                            loopStack.push(codePointer);
+                        }
+                        break;
+                    case ']':
+                        if (memory[pointer] !== 0) {
+                            codePointer = loopStack[loopStack.length - 1];
+                        } else {
+                            loopStack.pop();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                codePointer++;
+            }
+
+            outputDiv.textContent = output || 'No output.';
+        }
+    </script>
+</body>
+</html>
